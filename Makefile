@@ -23,12 +23,12 @@ endif
 all: $(DOCPNG)
 
 anim-2160:
-	mkdir -p anim/4k
+	mkdir -p anim/2160
 	$(POVRAY) $(POVOPT) $(STONES)[ANIM-2160] -I$(STONES).pov
 	avconv -y -framerate 25 -i anim/4k/$(STONES)-%03d.png -s:v 3840x2160 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-2160.mp4
 
 anim-4320:
-	mkdir -p anim/8k
+	mkdir -p anim/4320
 	$(POVRAY) $(POVOPT) $(STONES)[ANIM-4320] -I$(STONES).pov
 	avconv -y -framerate 25 -i anim/8k/$(STONES)-%03d.png -s:v 7680x4320 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-4320.mp4
 

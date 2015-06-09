@@ -16,6 +16,11 @@ PNGCLEAN  = ${STONES:=.pngclean}
 
 all: $(DOCPNG)
 
+anim-4k:
+	mkdir -p anim/4k
+	$(POVRAY) $(STONES)[ANIM-4K] -I$(STONES).pov
+	avconv -y -framerate 25 -i anim/4k/$(STONES)-%03d.png -s:v 4096x2160 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-4k.mp4
+
 anim-8k:
 	mkdir -p anim/8k
 	$(POVRAY) $(STONES)[ANIM-8K] -I$(STONES).pov

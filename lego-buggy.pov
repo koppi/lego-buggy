@@ -645,8 +645,6 @@ difference {
   object { clip2 rotate  y*90 translate <b+7.5*h,3*h,-b*7> }           // clip achse innen
   object { clip2 rotate -y*90 translate <b+7.5*h,3*h,b*9> }            // clip achse mitte
   object { clip2 rotate  y*90 translate <b+7.5*h,3*h,-b*9> }           // clip achse mitte
-  object { clip2 rotate -y*90 translate <b+7.5*h,3*h,b*12> }           // clip achse aussen
-  object { clip2 rotate  y*90 translate <b+7.5*h,3*h,-b*12> }          // clip achse aussen
   material {t_gray}
  }
  union {

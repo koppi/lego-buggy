@@ -17,14 +17,17 @@ PNGCLEAN  = ${STONES:=.pngclean}
 all: $(DOCPNG)
 
 anim-8k:
+	mkdir -p anim/8k
 	$(POVRAY) $(STONES)[ANIM-8K] -I$(STONES).pov
 	avconv -y -framerate 25 -i anim/8k/$(STONES)-%03d.png -s:v 7680x4320 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-8k.mp4
 
 anim-whigh:
+	mkdir -p anim/whigh
 	$(POVRAY) $(STONES)[ANIM-WHIGH] -I$(STONES).pov
 	avconv -y -framerate 25 -i anim/whigh/$(STONES)-%03d.png -s:v 1280x1024 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-whigh.mp4
 
 anim-low:
+	mkdir -p anim/low
 	$(POVRAY) $(STONES)[ANIM-LOW] -I$(STONES).pov
 	avconv -y -framerate 25 -i anim/low/$(STONES)-%03d.png -s:v 160x140 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-low.mp4
 

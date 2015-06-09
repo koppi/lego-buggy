@@ -112,23 +112,20 @@ global_settings{
 /* burls with l3go logo --------------------------------------------------- */
 
 #declare noppe =
-#if (fast=0)
  merge {
-#end
- cylinder { <0, h/2+nh-rundung, 0>, <0, h/2+nh+nh-rundung, 0>, 0.21 }
+  cylinder { <0, h/2+nh-rundung, 0>, <0, h/2+nh+nh-rundung, 0>, 0.21 }
+  torus { 0.2, 0.01
+   translate <0, h/2+nh+nh-0.005-rundung, 0>
+  }
+
 #if (fast=0)
   text { ttf "Generic.ttf" "LEGO" 0.07, 0
     scale <-0.15, -0.15, -0.2>
     rotate x*90
     translate <0.175, h/2+nh+nh-rundung, 0.05>
   }
-
-  torus { 0.2, 0.01
-   translate <0, h/2+nh+nh-0.005-rundung, 0>
-  }
-
- }
 #end
+ }
 
 /* lego_stone_template => st  ---------------------------------------------- */
 
@@ -927,17 +924,16 @@ difference {
 }
 
 #declare lego_buggy = union {
-  /*
  object { lego_buggy_seat translate <-3*b,15*h,b*1.5>  }
  object { lego_buggy_seat translate <-3*b,15*h,-b*6.5> }
   
  object { lego_buggy_window rotate <0,90,20> translate <7.5*b,29*h,6*b> }
  object { armatur rotate -z*45 translate <3.9*b,24.46*h,-1.5*b> }
-  */
+
  object { lenklager translate <8*b,3*h,0> }
-// object { stossstange }
+ object { stossstange }
   
-// object { hinterteil }
+ object { hinterteil }
  object { carosserie }
  object { hinterradlager rotate <0,90,0> translate <-9*b,-5*h,8.5*b> }
 

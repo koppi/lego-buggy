@@ -15,12 +15,12 @@
 
 /* control center----------------------------------------------------------- */
 
-#declare fast = 0;
+// #declare fast = 0;
 
-#declare use_radiosity=0;    // 0=off, 1=first pass (save), 2=second pass (load)
-#declare use_final_text=0;   // use final textures (0=test textures)
-#declare use_blur=0;         // # of samples (0=off)
-#declare use_area=0;         // 0=off, 1=on
+#declare use_radiosity=1;    // 0=off, 1=first pass (save), 2=second pass (load)
+#declare use_final_text=1;   // use final textures (0=test textures)
+#declare use_blur=1;         // # of samples (0=off)
+#declare use_area=1;         // 0=off, 1=on
 #declare rad_brightness=1.5; // radiosity brightness
 
 // camera params for the car paint (also used for the camera)
@@ -928,7 +928,7 @@ difference {
 
 /* environment ------------------------------------------------------------- */
 #declare use_area=1;
-/*
+
 #declare r_l=seed(414);
 #declare rhdr=360*rand(r_l);
 sphere{
@@ -974,8 +974,9 @@ light_source {
  rotate <9,0,-9>
  rotate rhdr*y
 } 
-*/
 
+
+/*
 // studio-like
 #declare lk=.05;
 light_source { 
@@ -1002,7 +1003,7 @@ light_source {
   }
  }
  rotate 60*y
-} 
+}*/
 
 sphere{0,300
   pigment{
@@ -1022,7 +1023,7 @@ plane { y, 0
  }
 }
 */
-
+/*
 plane { <0,1,0>, 0
   texture{
     pigment{
@@ -1032,6 +1033,20 @@ plane { <0,1,0>, 0
       bump_map{jpeg "square_wooden_floor_tiles_3030650" interpolate 2 bump_size 1}
     }
     finish{reflection{0,.1}}
+    rotate 90*x
+    scale 50
+  }
+}
+*/
+plane { <0,1,0>, 0
+  texture{
+    pigment{
+      image_map{jpeg "bright-bathroom-tiles-texture-seamless-Fantastic-Bathroom-Texture-Design-Ideas.jpg" interpolate 2}
+    }
+    normal{
+      bump_map{jpeg "bright-bathroom-tiles-texture-seamless-Fantastic-Bathroom-Texture-Design-Ideas.jpg" interpolate 2 bump_size 1}
+    }
+    finish{reflection{0.01,.99}}
     rotate 90*x
     scale 50
   }
@@ -1089,8 +1104,16 @@ object { lego_buggy rotate <0,0,-5.75> translate <0,2.5,0> rotate y*-5.75}
 
 /* camera ------------------------------------------------------------------ */
 
+// http://www.f-lohmueller.de/pov_tut/camera_light/camera_d1.htm
 
+camera {
+  orthographic angle 47
+  location <40*sin(clock*pi*2+1),20.5,40*cos(clock*pi*2+1)>
+  look_at  <2.5,5.5,0>
+  right x*image_width/image_height
+}
 
+/*
 camera {
 // orthographic
  right <320/10,0,0>
@@ -1099,7 +1122,7 @@ camera {
  location <40,29.5,40>
  look_at  <2.5,5.5,0>
  //aperture 1 blur_samples 7*7 focal_point 0
-}
+}*/
 
 /*
 camera {

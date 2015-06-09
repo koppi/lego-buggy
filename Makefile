@@ -26,15 +26,15 @@ anim-4320:
 	$(POVRAY) $(STONES)[ANIM-4320] -I$(STONES).pov
 	avconv -y -framerate 25 -i anim/8k/$(STONES)-%03d.png -s:v 7680x4320 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-4320.mp4
 
-anim-1024:
-	mkdir -p anim/1024
-	$(POVRAY) $(STONES)[ANIM-1024] -I$(STONES).pov
-	avconv -y -framerate 25 -i anim/whigh/$(STONES)-%03d.png -s:v 1280x1024 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-1024.mp4
+anim-720:
+	mkdir -p anim/720
+	$(POVRAY) $(STONES)[ANIM-720] -I$(STONES).pov
+	avconv -y -framerate 25 -i anim/whigh/$(STONES)-%03d.png -s:v 1280x720 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-720.mp4
 
-anim-240:
-	mkdir -p anim/240
-	$(POVRAY) $(STONES)[ANIM-240] -I$(STONES).pov
-	avconv -y -framerate 25 -i anim/low/$(STONES)-%03d.png -s:v 320x240 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-140.mp4
+anim-360:
+	mkdir -p anim/360
+	$(POVRAY) $(STONES)[ANIM-360] -I$(STONES).pov
+	avconv -y -framerate 25 -i anim/low/$(STONES)-%03d.png -s:v 640x360 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-360.mp4
 
 %.pov: Makefile
 

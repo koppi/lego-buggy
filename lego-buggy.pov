@@ -611,15 +611,15 @@ difference {
  object { s1x1x1 translate <-b,0,-b*1.5> }                               // 17
  object { s1x1x1 translate <-b,0,b*1.5> }                                // 18
  union {
-  object { p2738 rotate <0,180,180> translate <b+7.5*h,8*h,b*5.75>  }
-  object { p2738 rotate <180,0,180> translate <b+7.5*h,-1.75*h,b*5.75> }
-  object { p2738 rotate <0,0,180> translate <b+7.5*h,8*h,-b*5.75>  }
-  object { p2738 rotate <180,180,180> translate <b+7.5*h,-1.75*h,-b*5.75> }
+  object { p2738 scale 0.91 rotate <0,180,180> translate <b+7.5*h,8.2*h,b*5.55>  }
+  object { p2738 scale 0.91 rotate <180,0,180> translate <b+7.5*h,-1.75*h,b*5.55> }
+  object { p2738 scale 0.91 rotate <0,0,180> translate <b+7.5*h,8.2*h,-b*5.55>  }
+  object { p2738 scale 0.91 rotate <180,180,180> translate <b+7.5*h,-1.75*h,-b*5.55> }
   texture {t_blue}
  }
  union {
-  object { bolzen rotate <0,-90,0> translate <b+7.5*h,3*h,b*8.75> }
-  object { bolzen rotate <0,90,180> translate <b+7.5*h,3*h,-b*8.75> }
+  object { bolzen scale 0.92 rotate <0,-90,0> translate <b+7.5*h,3*h,b*8.5> }
+  object { bolzen scale 0.92 rotate <0,90,180> translate <b+7.5*h,3*h,-b*8.5> }
  }
  union {
   object { sf1x1x1 translate <b,h,b*.5> }                                // 19
@@ -628,6 +628,13 @@ difference {
   object { s8x1x1 rotate -y*90 translate <0,21*h,-b*3.5> }               // 149
   object { t6x3x1 rotate -y*90 translate <0,22*h,-b*2.5> }               // 150
   object { t12x3x1 rotate <90,0,90> translate <-b,-h*3,-.5*b> }          // 154
+   
+  object { clip2 rotate -y*90 translate <b+7.5*h,3*h,b*7> }            // clip achse innen
+  object { clip2 rotate  y*90 translate <b+7.5*h,3*h,-b*7> }           // clip achse innen
+  object { clip2 rotate -y*90 translate <b+7.5*h,3*h,b*9> }            // clip achse mitte
+  object { clip2 rotate  y*90 translate <b+7.5*h,3*h,-b*9> }           // clip achse mitte
+  object { clip2 rotate -y*90 translate <b+7.5*h,3*h,b*12> }           // clip achse aussen
+  object { clip2 rotate  y*90 translate <b+7.5*h,3*h,-b*12> }          // clip achse aussen
   texture {t_gray}
  }
  union {
@@ -657,6 +664,9 @@ difference {
   object { clip translate <-1.5*b,18.2*h,0> }                            // 146
   object { clip translate <-1.5*b,3.2*h,0> }                             // 147
   object { clip translate <-1.5*b,23.2*h,0> }                            // 151
+   
+  object { lp6 rotate -y*90 translate <b+7.5*h,3*h,b*7> }              // achse
+  object { lp6 rotate  y*90 translate <b+7.5*h,3*h,-b*7> }             // achse
   texture {t_black}
  }
  texture {t_gray}
@@ -862,12 +872,21 @@ difference {
  object { s6x1x1 rotate y*90  translate <b*3,3*h,b*2.5> }              // 15
  object { t8x3x1 rotate y*90  translate <b*12,0,b*3.5> }               // 16
  object { t8x3x1 rotate y*90  translate <b*12,10*h,b*3.5> }            // 69
- object { lp3 translate <b*10.5,h*1.2,b*3>}                            // 63
- object { clip1 translate <b*13,h*1.2,b*3> }                           // 65
- object { clip1 rotate z*180 translate <b*11,h*1.2,b*3> }              // 66
- object { lp3 translate <b*10.5,h*1.2,-b*3>}                           // 64
- object { clip1 translate <b*13,h*1.2,-b*3> }                          // 67
- object { clip1 rotate z*180 translate <b*11,h*1.2,-b*3> }             // 68
+  
+ object { lp3 translate <b*10.5,h*1.2,b*3>}                            // 63a
+ object { clip1 translate <b*13,h*1.2,b*3> }                           // 65a
+ object { clip1 rotate z*180 translate <b*11,h*1.2,b*3> }              // 66a
+ object { lp3 translate <b*10.5,h*1.2,-b*3>}                           // 64a
+ object { clip1 translate <b*13,h*1.2,-b*3> }                          // 67a
+ object { clip1 rotate z*180 translate <b*11,h*1.2,-b*3> }             // 68a
+  
+ object { lp3 translate <b*10.5,h*11.2,b*3>}                           // 63b
+ object { clip1 translate <b*13,h*11.2,b*3> }                          // 65b
+ object { clip1 rotate z*180 translate <b*11,h*11.2,b*3> }             // 66b
+ object { lp3 translate <b*10.5,h*11.2,-b*3>}                          // 64b
+ object { clip1 translate <b*13,h*11.2,-b*3> }                         // 67b
+ object { clip1 rotate z*180 translate <b*11,h*11.2,-b*3> }            // 68b
+
  object { s6x1x1 translate <-b*2,4*h,-b*2.5> }                         // 35
  object { s6x1x1 translate <-b*2,4*h,b*2.5> }                          // 36
  object { t6x3x1 translate <-b*2,10*h,-b*2.5> }                        // 56
@@ -908,15 +927,17 @@ difference {
 }
 
 #declare lego_buggy = union {
+  /*
  object { lego_buggy_seat translate <-3*b,15*h,b*1.5>  }
  object { lego_buggy_seat translate <-3*b,15*h,-b*6.5> }
   
  object { lego_buggy_window rotate <0,90,20> translate <7.5*b,29*h,6*b> }
  object { armatur rotate -z*45 translate <3.9*b,24.46*h,-1.5*b> }
+  */
  object { lenklager translate <8*b,3*h,0> }
- object { stossstange }
+// object { stossstange }
   
- object { hinterteil }
+// object { hinterteil }
  object { carosserie }
  object { hinterradlager rotate <0,90,0> translate <-9*b,-5*h,8.5*b> }
 
@@ -1100,7 +1121,7 @@ plane { <0,1,0>, 0
 
 /* scene objects ----------------------------------------------------------- */
 
-object { lego_buggy rotate <0,0,-5.75> translate <0,2.5,0> rotate y*-5.75}
+object { lego_buggy rotate <0,0,-5.7> translate <0,2.5,0> rotate y*-5.7}
 
 /* camera ------------------------------------------------------------------ */
 
@@ -1108,8 +1129,8 @@ object { lego_buggy rotate <0,0,-5.75> translate <0,2.5,0> rotate y*-5.75}
 
 camera {
   orthographic angle 47
-  location <40*sin(clock*pi*2+1),20.5,40*cos(clock*pi*2+1)>
-  look_at  <2.5,5.5,0>
+  location <45*sin(clock*pi*2+1),20.5,45*cos(clock*pi*2+1)>
+  look_at  <2.5,6.5,0>
   right x*image_width/image_height
 }
 

@@ -16,25 +16,25 @@ PNGCLEAN  = ${STONES:=.pngclean}
 
 all: $(DOCPNG)
 
-anim-4k:
+anim-2160:
 	mkdir -p anim/4k
-	$(POVRAY) $(STONES)[ANIM-4K] -I$(STONES).pov
-	avconv -y -framerate 25 -i anim/4k/$(STONES)-%03d.png -s:v 4096x2160 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-4k.mp4
+	$(POVRAY) $(STONES)[ANIM-2160] -I$(STONES).pov
+	avconv -y -framerate 25 -i anim/4k/$(STONES)-%03d.png -s:v 3840x2160 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-2160.mp4
 
-anim-8k:
+anim-4320:
 	mkdir -p anim/8k
-	$(POVRAY) $(STONES)[ANIM-8K] -I$(STONES).pov
-	avconv -y -framerate 25 -i anim/8k/$(STONES)-%03d.png -s:v 7680x4320 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-8k.mp4
+	$(POVRAY) $(STONES)[ANIM-4320] -I$(STONES).pov
+	avconv -y -framerate 25 -i anim/8k/$(STONES)-%03d.png -s:v 7680x4320 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-4320.mp4
 
-anim-whigh:
-	mkdir -p anim/whigh
-	$(POVRAY) $(STONES)[ANIM-WHIGH] -I$(STONES).pov
-	avconv -y -framerate 25 -i anim/whigh/$(STONES)-%03d.png -s:v 1280x1024 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-whigh.mp4
+anim-1024:
+	mkdir -p anim/1024
+	$(POVRAY) $(STONES)[ANIM-1024] -I$(STONES).pov
+	avconv -y -framerate 25 -i anim/whigh/$(STONES)-%03d.png -s:v 1280x1024 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-1024.mp4
 
-anim-low:
-	mkdir -p anim/low
-	$(POVRAY) $(STONES)[ANIM-LOW] -I$(STONES).pov
-	avconv -y -framerate 25 -i anim/low/$(STONES)-%03d.png -s:v 160x140 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-low.mp4
+anim-240:
+	mkdir -p anim/240
+	$(POVRAY) $(STONES)[ANIM-240] -I$(STONES).pov
+	avconv -y -framerate 25 -i anim/low/$(STONES)-%03d.png -s:v 320x240 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p $(STONES)-140.mp4
 
 %.pov: Makefile
 

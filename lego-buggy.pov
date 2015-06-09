@@ -16,16 +16,9 @@
 /* control center----------------------------------------------------------- */
 
 // #declare fast = 0;
-
 #declare use_radiosity=1;    // 0=off, 1=first pass (save), 2=second pass (load)
-#declare use_final_text=1;   // use final textures (0=test textures)
-#declare use_blur=1;         // # of samples (0=off)
 #declare use_area=1;         // 0=off, 1=on
-#declare rad_brightness=1.5; // radiosity brightness
-
-// camera params for the car paint (also used for the camera)
-#declare clo=<6,2.1,2.5>;    // location
-#declare cla=<-1.2,.2,0>;    // look_at
+#declare matrix_mode = 0;
 
 global_settings{
   ambient_light 0
@@ -47,66 +40,88 @@ global_settings{
  #debug "\n\nfast = off"
 #end
 
-/* textures ---------------------------------------------------------------- */
+/* materials --------------------------------------------------------------- */
 
-#declare t_red_d = texture {
-   pigment { rgb <1, 0, 0> filter 0.7}
-   finish { ambient 0.2 phong 1 }
-   normal { granite .02 scale .01 }
+#macro material_matrix()
+  texture {
+    pigment { rgb <0, 1, 0> }
+    finish { ambient 1 phong 1 }
+    normal { granite .02 scale .01 }
+  }
+  interior { ior 1.5 }
+#end
+
+#macro material_default(COLOR)
+  texture {
+    pigment { COLOR }
+    finish { ambient 0.2 phong 1 }
+    normal { granite .01 scale .01 }
+  }
+#end
+
+#macro material_reflect(COLOR)
+  texture {
+    pigment { COLOR }
+    finish { ambient 0.2 phong 1 reflection 0.2 }
+    normal { granite .02 scale .01 }
+  }
+#end
+
+#declare t_red = material {
+#if (matrix_mode=1)
+  material_matrix()
+#else
+  material_default(rgb<1,0,0>)
+#end
 }
 
-#declare t_yellow_d = texture {
-   pigment { rgb <1, 0.88, 0> filter 0.7}
-   finish { ambient 0.4 phong 1 reflection 0.07 }
-   normal { granite .02 scale .1 }
+#declare t_yellow = material {
+#if (matrix_mode=1)
+  material_matrix()
+#else
+  material_default(rgb<0,0.9,0>)
+#end
 }
 
-#declare t_red = texture {
-   pigment { rgb <1, 0, 0>}
-   finish { phong 1 reflection 0.07 }
-   normal { granite .02 scale .01 }
+#declare t_blue = material {
+#if (matrix_mode=1)
+  material_matrix()
+#else
+  material_default(rgb<0,0,1>)
+#end
 }
 
-#declare t_yellow = texture {
-   pigment { rgb <1, 0.9, 0>}
-   finish { phong 1 reflection 0.07 }
-   normal { granite .02 scale .01 }
+#declare t_green = material {
+#if (matrix_mode=1)
+  material_matrix()
+#else
+  material_default(rgb<0,0.8,0>)
+#end
 }
 
-#declare t_blue_d = texture {
-   pigment { rgb <0, 0, 1> filter 0.7}
-   finish { ambient 0.2 phong 1 reflection 0.07 }
-   normal { granite .02 scale .01 }
-}                                                                               
-
-#declare t_blue = texture {
-   pigment { rgb <0, 0, 1>}
-   finish { phong 1 reflection 0.07 }
-   normal { granite .02 scale .01 }
+#declare t_gray = material {
+#if (matrix_mode=1)
+  material_matrix()
+#else
+  material_default(rgb<0.8,0.8,0.8>)
+#end
 }
 
-#declare t_green = texture {
-   pigment { rgb <0, 0.8, 0>}
-   finish { phong 1 reflection 0.07 }
-   normal { granite .02 scale .01 }
+
+#declare t_black = material {
+#if (matrix_mode=1)
+  material_matrix()
+#else
+  material_reflect(rgb<0,0,0>)
+#end
 }
 
-#declare t_gray = texture {
-   pigment { rgb <0.8, 0.8, 0.8>}
-   finish { phong 1 reflection 0.07 }
-   normal { granite .02 scale .01 }
-}
-
-#declare t_black = texture {
-   pigment { rgb <0, 0, 0>}
-   finish { phong 1 reflection 0.2 }
-   normal { granite .01 scale .01 }
-}
-
-#declare t_white = texture {
-   pigment { rgb <1, 1, 1>}
-   finish { phong 1 reflection 0.2 }
-   normal { granite .01 scale .01 }
+#declare t_white = material {
+#if (matrix_mode=1)
+  material_matrix()
+#else
+  material_reflect(rgb<1,1,1>)
+#end
 }
 
 /* burls with l3go logo --------------------------------------------------- */
@@ -193,7 +208,7 @@ global_settings{
      #if (fast=0)
      box { <-0.7/2.05-b/2,h*1.7,-b/2+0.007>, <0.7/2.05-b/2,h*YSIZE-rundung*2,b/2-0.007>
       translate <I*b,0,0>
-      texture { t_yellow }
+      material { t_yellow }
      }
      #end // if (fast=0)
     #end // if (WHOLE=yes)
@@ -302,7 +317,7 @@ global_settings{
    sphere { <rundung,0,0>, 0.1 }
    sphere { <0,0,0>, 0.1 translate <b*XSIZE-rundung,0,0>}
   }
-  texture {t_black}
+  material {t_black}
  }
 #end // macro
 
@@ -335,7 +350,7 @@ difference {
   cylinder { <b*.225,0,0> <b-b*.225,0,0>, 0.334 }
   cylinder { <b*.225-0.01,0,0> <b-b*.225+0.01,0,0>, 0.253 }
  }
- texture {t_gray}
+ material {t_gray}
 }
 
 #declare clip3 =
@@ -350,7 +365,7 @@ difference {
   }
   cylinder { <b*1.5,0,-b*.51> <b*1.5,0,b*.51>, 0.25 }
  }
- texture {t_gray}
+ material {t_gray}
 }
 
 #declare clip4 =
@@ -379,7 +394,7 @@ difference {
   cylinder { <b*.225,0,0> <b-b*.225,0,0>, 0.334 }
   cylinder { <b*.225-0.01,0,0> <b-b*.225+0.01,0,0>, 0.253 }
  }
-texture {t_gray}
+material {t_gray}
 }
 
 #declare clip1 =
@@ -395,7 +410,7 @@ union {
  box { <b*.45,-0.06,-0.022> <b*.45+0.05,0.06,0.022> translate <0,0.272,0> rotate x*i/16*360}
 #local i=i+1;
 #end
- texture {t_gray}
+ material {t_gray}
 }
 
 #declare clip =
@@ -411,14 +426,14 @@ difference {
   box { <2*b+0.1,-0.03,-0.25> <2*b-b/3,0.03,0.25> }
   box { <-0.1,-0.25,-0.03> <b/3,0.25,0.03> }
  }
- texture {t_black}
+ material {t_black}
 }
 
 /* lego car ---------------------------------------------------------------- */
 
 #declare lego_buggy_wheel = union {
-  object { p3739 texture { t_white } rotate <0,-90,0> translate <b*3,0,0> }
-  object { p3740 texture { t_black } rotate <0,-90,0> translate <b*1.25,0,0> }
+  object { p3739 material { t_white } rotate <0,-90,0> translate <b*3,0,0> }
+  object { p3740 material { t_black } rotate <0,-90,0> translate <b*1.25,0,0> }
   scale 0.875
 }
 
@@ -461,7 +476,7 @@ difference {
   object { t6x3x1 rotate -z*90 translate <b+12*b,12.5*h,2*b> }
   object { t6x3x1 rotate -z*90 translate <4*b+12*b,12.5*h,2*b> }
 
-  texture {t_blue}
+  material {t_blue}
  }
  union {
 // left
@@ -486,7 +501,7 @@ difference {
   object { t4x3x1 rotate y*90 translate <12*b,10*h,5*b> }
   object { s6x1x1 rotate y*90 translate <12*b,13*h,5*b> }
 
-  texture {t_gray}
+  material {t_gray}
  }
 // left
  object { lp4 rotate y*90 translate <0.5*b,1.2*h,2.5*b> }
@@ -529,7 +544,7 @@ difference {
   object { p4275b scale 0.875 rotate <0,90,180> translate <-b*1.75,h*1.5,b*5> }
   rotate <0,0,-65>
  }
- texture {t_blue}
+ material {t_blue}
 }
 
 #declare lego_buggy_window = union {
@@ -586,7 +601,7 @@ difference {
   object { clip rotate y*90 translate <2.5*b,-2.5*b,-5*b> }              // 221
   object { clip2 rotate -y*90 translate <2.5*b,-4.5*b,9*b> }             // 222
   object { clip2 rotate y*90 translate <2.5*b,-4.5*b,-6*b> }             // 223
-  texture {t_black}
+  material {t_black}
  }
  union {
   object { t4x3x1 rotate z*90 translate <b,-3.2*h,8*b> }                 // 210
@@ -597,10 +612,10 @@ difference {
   object { s4x1x4 rotate z*90 translate <b+2*h,-3.2*h,-8*b> }            // 218
   object { t8x3x1 rotate z*90 translate <b+5*h,-13.2*h,8*b> }            // 214
   object { t8x3x1 rotate z*90 translate <b+5*h,-13.2*h,-5*b> }           // 219
-  texture {t_red}
+  material {t_red}
  }
   
- object {lenkrad rotate <0,90,180> translate <-b+h,3*h,2.5*b> texture{t_black}}
+ object {lenkrad rotate <0,90,180> translate <-b+h,3*h,2.5*b> material{t_black}}
 }
 
 #declare lenklager = union {
@@ -612,7 +627,7 @@ difference {
   object { p2738 scale 0.91 rotate <180,0,180> translate <b+7.5*h,-1.75*h,b*5.55> }
   object { p2738 scale 0.91 rotate <0,0,180> translate <b+7.5*h,8.2*h,-b*5.55>  }
   object { p2738 scale 0.91 rotate <180,180,180> translate <b+7.5*h,-1.75*h,-b*5.55> }
-  texture {t_blue}
+  material {t_blue}
  }
  union {
   object { bolzen scale 0.92 rotate <0,-90,0> translate <b+7.5*h,3*h,b*8.5> }
@@ -632,7 +647,7 @@ difference {
   object { clip2 rotate  y*90 translate <b+7.5*h,3*h,-b*9> }           // clip achse mitte
   object { clip2 rotate -y*90 translate <b+7.5*h,3*h,b*12> }           // clip achse aussen
   object { clip2 rotate  y*90 translate <b+7.5*h,3*h,-b*12> }          // clip achse aussen
-  texture {t_gray}
+  material {t_gray}
  }
  union {
   object { s2x1x1 translate <-b,h,-b*1.5> }                               // 21
@@ -655,18 +670,18 @@ difference {
   object { s2x3x1 rotate -y*90 translate <0,14*h,-b*.5> }                // 142
   object { t2x3x1 rotate -y*90 translate <0,17*h,-b*.5> }                // 143
   object { s2x3x1 rotate y*90 translate <0,14*h,-b*4.5> }                // 144
-  object { s2x1x1 rotate y*90 translate <0,17*h,-b*4.5> texture {t_red}} // 152
+  object { s2x1x1 rotate y*90 translate <0,17*h,-b*4.5> material {t_red}} // 152
   object { s2x3x1 rotate -y*90 translate <0,14*h,b*4.5> }                // 145
-  object { s2x1x1 rotate -y*90 translate <0,17*h,b*4.5> texture {t_red}} // 153
+  object { s2x1x1 rotate -y*90 translate <0,17*h,b*4.5> material {t_red}} // 153
   object { clip translate <-1.5*b,18.2*h,0> }                            // 146
   object { clip translate <-1.5*b,3.2*h,0> }                             // 147
   object { clip translate <-1.5*b,23.2*h,0> }                            // 151
    
   object { lp6 rotate -y*90 translate <b+7.5*h,3*h,b*7> }              // achse
   object { lp6 rotate  y*90 translate <b+7.5*h,3*h,-b*7> }             // achse
-  texture {t_black}
+  material {t_black}
  }
- texture {t_gray}
+ material {t_gray}
 }
 
 #declare stossstange = union {
@@ -698,7 +713,7 @@ difference {
   object { s2x1x8 rotate -y*90 translate <b*13,29*h,-b*5.5> }            // 242
   object { s10x1x6 rotate y*90 translate <b*12,30*h,b*4.5> }             // 243
   object { s10x1x6 rotate y*90 translate <b*6,30*h,b*4.5> }              // 244
-  texture {t_red}
+  material {t_red}
  }
  union {
   object { s4x1x1 rotate y*90 translate <b*12,14*h,b*.5> }                // 85
@@ -706,7 +721,7 @@ difference {
   object { s1x1x1 translate <b*17,18*h,-b*3.5> }                         // 163
   object { s8x1x1 rotate y*90 translate <b*17,24*h,b*3.5> }              // 170
   object { t6x3x1 rotate y*90 translate <b*17,25*h,b*2.5> }              // 171
-  texture {t_gray}
+  material {t_gray}
  }
  union {
   object { s4x1x1 translate <b*17,9*h,b*3.5> }                            // 71
@@ -732,7 +747,7 @@ difference {
   object { s10x1x1 rotate y*90 translate <b*17,28*h,b*4.5> }             // 236
   object { s2x1x1 rotate <90,90,0> translate <b*17.5,26.5*h,4.5*b> }     // 254
   object { s2x1x1 rotate <90,90,0> translate <b*17.5,26.5*h,-3.5*b> }    // 255
-  texture {t_black}
+  material {t_black}
  }
   object { clip translate <b*16,11*h,-b*2> }                             // 172
   object { clip translate <b*16,11*h,b*2> }                              // 173
@@ -767,9 +782,9 @@ difference {
 
  union {
   cylinder { <b*17.5+nh,25.5*h,4*b> <b*17.5+h+nh,25.5*h,4*b>, 0.666
-             texture {t_white} }                                         // 256
+             material {t_white} }                                         // 256
   cylinder { <b*17.5+nh,25.5*h,-4*b> <b*17.5+h+nh,25.5*h,-4*b>, 0.666
-             texture {t_white} }                                         // 257
+             material {t_white} }                                         // 257
  }
 }
 
@@ -834,9 +849,9 @@ difference {
   object { t8x3x1 translate <-b*2.6,14.4*h,-b*7.5> }                     // 225
   object { t6x3x1 rotate -z*52 translate <-b*5.2,23.5*h,b*8.5> }         // 228
   object { t6x3x1 rotate -z*52 translate <-b*5.2,23.5*h,-b*8.5> }        // 229
-  texture {t_red}
+  material {t_red}
  }
- texture {t_gray}
+ material {t_gray}
 }
 
 #declare carosserie = union {
@@ -918,9 +933,9 @@ difference {
   object { clip2 rotate -y*90 translate <1.5*b,1.2*h,-5*b> }           // 260
   object { lp10 rotate y*90 translate <-.5*b,11.2*h,b*5> }             // 60
   object { lp10 rotate y*90 translate <1.5*b,11.2*h,b*5> }             // 63
-  texture {t_black}
+  material {t_black}
  }
- texture {t_gray}
+ material {t_gray}
 }
 
 #declare lego_buggy = union {
@@ -944,176 +959,101 @@ difference {
 }
 
 /* environment ------------------------------------------------------------- */
-#declare use_area=1;
-
 #declare r_l=seed(414);
 #declare rhdr=360*rand(r_l);
-sphere{
- 0,500
- texture{
-  pigment{image_map{hdr "pd_kitchen_probe_1" map_type 1 interpolate 2}}
-  finish{emission .125 diffuse 0}
-  rotate 180*y
- }
- hollow no_shadow no_image
- rotate rhdr*y
-}
-sphere{
- 0,500
- texture{
-  pigment{image_map{hdr "pd_kitchen_probe_1" map_type 1 interpolate 2}}
-  finish{emission .25 diffuse 0}
-  rotate 180*y
- }
- hollow no_shadow no_radiosity
- rotate rhdr*y
-}
-#declare lk=.25;
-light_source { 
- <-264,283,872>*.5
- rgb (White+SkyBlue+Blue*.1)*400000*lk
- #if (use_area)
- area_light 40*x,40*y,6,6 jitter adaptive 1 orient circular
- #end
- fade_distance 1
- fade_power 2
- rotate 90*y
- rotate rhdr*y
-} 
-light_source { 
- <-523,619,-523>*.5
- rgb (White+Gold*2)*100000*lk
- #if (use_area)
- area_light 20*x,20*z,4,4 jitter adaptive 1 orient circular
- #end
- fade_distance 1
- fade_power 2
- rotate <9,0,-9>
- rotate rhdr*y
-} 
 
-
-/*
-// studio-like
-#declare lk=.05;
-light_source { 
- <0,200,0>
- rgb (White)*50000*lk 
- //spotlight radius 30 falloff 45 tightness 1 point_at 0
- #if (use_area)
- area_light 25*x,25*z,4,4 jitter adaptive 1 orient circular
- #end
- fade_distance 1
- fade_power 2 
- looks_like{
-  sphere{0,1
-    pigment{rgbt 1}
-    finish{diffuse 0}
-    interior{
-      media{
-        emission SkyBlue*.5+White*.5
-        density{spherical}
-      }
-    }
-    hollow no_shadow
-    scale 15
-  }
- }
- rotate 60*y
-}*/
-
-sphere{0,300
-  pigment{
-    image_map{hdr "jvp_studio-light-to-hdr-5" map_type 1 interpolate 2}
+#if (matrix_mode=1)
+  #declare lk=.25;
+  light_source { 
+    <-264,283,872>*.5
+    rgb (White+SkyBlue+Blue*.1)*400000*lk
+    #if (use_area)
+      area_light 40*x,40*y,6,6 jitter adaptive 1 orient circular
+    #end
+    fade_distance 1
+    fade_power 2
     rotate 90*y
+    rotate rhdr*y
+  } 
+  light_source { 
+    <-523,619,-523>*.5
+    rgb (White+Gold*2)*100000*lk
+    #if (use_area)
+      area_light 20*x,20*z,4,4 jitter adaptive 1 orient circular
+    #end
+    fade_distance 1
+    fade_power 2
+    rotate <9,0,-9>
+    rotate rhdr*y
+  } 
+#else
+  
+  sphere{
+    0,500
+    texture{
+      pigment{image_map{hdr "pd_kitchen_probe_1" map_type 1 interpolate 2}}
+      finish{emission .125 diffuse 0}
+      rotate 180*y
+    }
+    hollow no_shadow no_image
+    rotate rhdr*y
   }
-  finish{emission .5 diffuse .5}  hollow
-}
+  sphere{
+    0,500
+    texture{
+      pigment{image_map{hdr "pd_kitchen_probe_1" map_type 1 interpolate 2}}
+      finish{emission .25 diffuse 0}
+      rotate 180*y
+    }
+    hollow no_shadow no_radiosity
+    rotate rhdr*y
+  }
+  #declare lk=.4;
+  light_source { 
+    <-264,283,872>*.5
+    rgb (White+SkyBlue+Blue*.1)*400000*lk
+    #if (use_area)
+      area_light 40*x,40*y,6,6 jitter adaptive 1 orient circular
+    #end
+    fade_distance 1
+    fade_power 2
+    rotate 90*y
+    rotate rhdr*y
+  } 
+  light_source { 
+    <-523,619,-523>*.5
+    rgb (White+Gold*2)*100000*lk
+    #if (use_area)
+      area_light 20*x,20*z,4,4 jitter adaptive 1 orient circular
+    #end
+    fade_distance 1
+    fade_power 2
+    rotate <9,0,-9>
+    rotate rhdr*y
+  } 
+  
+  sphere{0,300
+    pigment{
+      image_map{hdr "jvp_studio-light-to-hdr-5" map_type 1 interpolate 2}
+      rotate 90*y
+    }
+    finish{emission .5 diffuse .5}  hollow
+  }
 
-/*
-plane { y, 0
- texture {
-  pigment { image_map { jpeg "oakdoor.jpg" interpolate 2} }
-  normal  { bump_map  { jpeg "oakdoor.jpg" interpolate 2 bump_size 1} }
-  finish  { reflection {0,.1 } }
-  translate -.5 rotate <90,90,0> scale <10,10,5> * 5
- }
-}
-*/
-/*
-plane { <0,1,0>, 0
-  texture{
-    pigment{
-      image_map{jpeg "square_wooden_floor_tiles_3030650" interpolate 2}
-    }
-    normal{
-      bump_map{jpeg "square_wooden_floor_tiles_3030650" interpolate 2 bump_size 1}
-    }
-    finish{reflection{0,.1}}
-    rotate 90*x
-    scale 50
-  }
-}
-*/
-plane { <0,1,0>, 0
-  texture{
-    pigment{
-      image_map{jpeg "bright-bathroom-tiles-texture-seamless-Fantastic-Bathroom-Texture-Design-Ideas.jpg" interpolate 2}
-    }
-    normal{
-      bump_map{jpeg "bright-bathroom-tiles-texture-seamless-Fantastic-Bathroom-Texture-Design-Ideas.jpg" interpolate 2 bump_size 1}
-    }
-    finish{reflection{0.01,.99}}
-    rotate 90*x
-    scale 50
-  }
-}
-
-/*
-plane { <0,1,0>, 0
-  texture{
-    pigment{
-      image_map{jpeg "planetgranite-limestone3_seamless" interpolate 2}
-      turbulence .1
-    }
-    normal{
-      bump_map{jpeg "planetgranite-limestone3_seamless" interpolate 2 bump_size 1}
-      turbulence .1
-    }
-    finish{reflection{.01,.99}}
-    rotate 90*x
-    scale 50
-  }
-}
-*/
-/*
-plane { <0,1,0>, 0
-  texture{
-    pigment{
-      image_map{jpeg "soft_rug" interpolate 2}
-    }
-    rotate 90*x
-    scale 35
-  }
-  texture{
-    pigment{
-      image_map{jpeg "soft_rug" interpolate 2 filter all 1}
-      turbulence .1 lambda 3
-    }
-    rotate 90*x
-    scale 35
-  }
-}
-
-plane { <0,1,0>, 0
-  texture{
-    pigment{
-      White
+  plane { <0,1,0>, 0
+    texture{
+      pigment{
+        image_map{jpeg "bright-bathroom-tiles-texture-seamless-Fantastic-Bathroom-Texture-Design-Ideas.jpg" interpolate 2}
+      }
+      normal{
+        bump_map{jpeg "bright-bathroom-tiles-texture-seamless-Fantastic-Bathroom-Texture-Design-Ideas.jpg" interpolate 2 bump_size 1}
+      }
+      finish{reflection{0.01,.99}}
+      rotate 90*x
+    scale 40
     }
   }
-}
-
-*/
+#end
 
 /* scene objects ----------------------------------------------------------- */
 
@@ -1121,29 +1061,9 @@ object { lego_buggy rotate <0,0,-5.7> translate <0,2.5,0> rotate y*-5.7}
 
 /* camera ------------------------------------------------------------------ */
 
-// http://www.f-lohmueller.de/pov_tut/camera_light/camera_d1.htm
-
 camera {
   orthographic angle 47
   location <45*sin(clock*pi*2+1),20.5,45*cos(clock*pi*2+1)>
   look_at  <2.5,6.5,0>
   right x*image_width/image_height
 }
-
-/*
-camera {
-// orthographic
- right <320/10,0,0>
- up <240/10,0,0>
- angle 29
- location <40,29.5,40>
- look_at  <2.5,5.5,0>
- //aperture 1 blur_samples 7*7 focal_point 0
-}*/
-
-/*
-camera {
- orthographic
- location <16.5,16.5,-16.5>
- look_at  <2,8,0>
-}*/

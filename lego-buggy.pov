@@ -16,17 +16,17 @@
 /* control center----------------------------------------------------------- */
 
 // #declare fast = 0;
-#declare use_radiosity=1;    // 0=off, 1=first pass (save), 2=second pass (load)
 #declare use_area=1;         // 0=off, 1=on
 #declare matrix_mode = 0;
 
 global_settings{
   ambient_light 0
   assumed_gamma 1.0 
-  #include "rad_def.inc"
-  radiosity{Rad_Settings(Radiosity_IndoorLQ, off, off)}
+//  #include "rad_def.inc"
+//  radiosity{Rad_Settings(Radiosity_IndoorHQ, off, off)}
 }
-#default{texture{finish{ambient 0 diffuse 1}}}
+//#default{texture{finish{ambient 0 diffuse 1}}}
+//#default{texture{finish{ambient 1 diffuse 1}}}
 
 /* l3go stone properties --------------------------------------------------- */
 
@@ -1006,10 +1006,11 @@ difference {
     hollow no_shadow no_radiosity
     rotate rhdr*y
   }
-  #declare lk=.4;
+  #declare lk=.35;
   light_source { 
-    <-264,283,872>*.5
-    rgb (White+SkyBlue+Blue*.1)*400000*lk
+    <-264,283,872>*.3
+    rgb (<1,1,1>)*400000*lk
+//    rgb (White+SkyBlue+Blue*.1)*400000*lk
     #if (use_area)
       area_light 40*x,40*y,6,6 jitter adaptive 1 orient circular
     #end
@@ -1019,7 +1020,7 @@ difference {
     rotate rhdr*y
   } 
   light_source { 
-    <-523,619,-523>*.5
+    <-523,619,-523>*.3
     rgb (White+Gold*2)*100000*lk
     #if (use_area)
       area_light 20*x,20*z,4,4 jitter adaptive 1 orient circular
@@ -1046,7 +1047,7 @@ difference {
       normal{
         bump_map{jpeg "bright-bathroom-tiles-texture-seamless-Fantastic-Bathroom-Texture-Design-Ideas.jpg" interpolate 2 bump_size 1}
       }
-      finish{reflection{0.01,.99}}
+      finish{reflection{0.01,.09}}
       rotate 90*x
     scale 40
     }

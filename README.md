@@ -6,4 +6,4 @@ Set 8865, released in 1988, was the third generation auto chassis and improved u
 
 ## Authors
 
-* © 1997 – 2022 **Jakob Flierl** -  [koppi](https://github.com/koppi)
+* © 1997 – 2025 **Jakob Flierl** - [koppi](https://github.com/koppi)
